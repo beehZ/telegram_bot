@@ -1,0 +1,6 @@
+DO NOT COMMIT THESE FILES:
+- .env          — contains HF_API_KEY
+- tg_api.txt    — contains Telegram bot token
+- goals.db*     — SQLite database with user data
+
+These are already in .dockerignore and should be in .gitignore too.
