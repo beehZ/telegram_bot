@@ -1,20 +1,6 @@
-# Python
+venv/
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-
-# Environment
 .env
-.env.example
-
-# Databases
-*.db
-
-# Other
-node_bot/
-nul
-.dockerignore
-Dockerfile
-docker-compose.yml
-requirements.txt
+DONOTCOMMIT.txt
+tg_api.txt
