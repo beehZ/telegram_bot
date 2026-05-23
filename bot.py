@@ -47,6 +47,57 @@ from modules.scheduler import SchedulerCoordinator
 from modules.reminder import ReminderEngine as LifeReminderEngine
 from modules.checkin import CheckinEngine
 from modules.student import StudentEngine
+from flask import Flask
+from threading import Thread
+import telebot
+import os
+
+TOKEN = os.getenv("BOT_TOKEN")  # Render environment variable
+bot = telebot.TeleBot(TOKEN)
+
+# =========================
+# KEEP ALIVE SERVER
+# =========================
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is alive!"
+
+@app.route('/health')
+def health():
+    return "OK"
+
+def run():
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
+# =========================
+# BOT COMMANDS
+# =========================
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.reply_to(message, "Salom! Bot ishlayapti 🔥")
+
+@bot.message_handler(func=lambda message: True)
+def echo(message):
+    bot.reply_to(message, f"Siz yozdingiz: {message.text}")
+
+# =========================
+# START BOT
+# =========================
+
+keep_alive()
+
+print("Bot started...")
+
+bot.infinity_polling(skip_pending=True)
 
 from aiogram.exceptions import TelegramBadRequest
 
