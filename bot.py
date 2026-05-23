@@ -1,4 +1,6 @@
 import asyncio
+from flask import Flask
+from threading import Thread
 import base64
 import json
 import logging
@@ -61,6 +63,28 @@ async def safe_edit_text(message, text, reply_markup=None, **kwargs):
 
 
 load_dotenv()
+
+# =========================
+# KEEP ALIVE FOR RENDER
+# =========================
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is alive!"
+
+@app.route('/health')
+def health():
+    return "OK"
+
+def run_web():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
+
+def keep_alive():
+    t = Thread(target=run_web)
+    t.start()
 
 logger = logging.getLogger("hf_bot")
 logger.setLevel(logging.INFO)
@@ -2255,5 +2279,5 @@ async def main():
 
 
 if __name__ == "__main__":
+    keep_alive()
     asyncio.run(main())
-  
